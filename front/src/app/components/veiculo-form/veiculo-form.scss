@@ -1,0 +1,129 @@
+@use 'sass:color';
+
+.veiculo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: var(--surface-color);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  input, select {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--background-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+  }
+
+  .error {
+    color: var(--status-delayed-color);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+
+  @media (max-width: 600px) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .footer-right {
+    display: flex;
+    gap: 1rem;
+    
+    @media (max-width: 600px) {
+      flex-direction: column-reverse;
+      width: 100%;
+    }
+  }
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-cancel {
+    background: transparent;
+    color: var(--text-secondary-color);
+    border: 1px solid var(--border-color);
+
+    &:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  .btn-save {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.9);
+    }
+  }
+
+  .btn-delete {
+    background: transparent;
+    color: #f44336;
+    border: 1px solid #f44336;
+
+    &:hover:not(:disabled) {
+      background: #f44336;
+      color: white;
+    }
+
+    .material-icons {
+      font-size: 1.25rem;
+    }
+  }
+}

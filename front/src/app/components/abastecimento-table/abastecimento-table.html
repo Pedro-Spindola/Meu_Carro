@@ -1,0 +1,46 @@
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Combustível</th>
+        <th class="align-right">Valor Total</th>
+        <th class="align-right">Litros</th>
+        <th class="align-right">Valor/L</th>
+        <th class="align-right">KM</th>
+        <th class="align-right highlight-col">Consumo Médio</th>
+        <th class="align-right highlight-col">Custo por KM</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="abastecimentos.length === 0">
+        <td colspan="8" class="empty-state">Nenhum abastecimento registrado.</td>
+      </tr>
+      <tr *ngFor="let item of abastecimentos">
+        <td class="col-date">{{ item.data | date:'dd/MM/yyyy' }}</td>
+        <td class="col-fuel">
+          <span class="fuel-badge">{{ item.tipoCombustivel }}</span>
+        </td>
+        <td class="align-right">{{ item.valorTotal | currency:'BRL' }}</td>
+        <td class="align-right">{{ item.litros | number:'1.2-2' }} L</td>
+        <td class="align-right">{{ item.valorLitro | currency:'BRL' }}</td>
+        <td class="align-right">{{ item.quilometragem | number }}</td>
+        
+        <td class="align-right highlight-col">
+          <span class="metric-badge" [ngClass]="getConsumoClass(item.consumoMedio)">
+            <span class="material-icons" *ngIf="item.consumoMedio > 0">
+              {{ item.consumoMedio >= 12 ? 'trending_up' : (item.consumoMedio >= 8 ? 'trending_flat' : 'trending_down') }}
+            </span>
+            {{ item.consumoMedio ? (item.consumoMedio | number:'1.1-1') + ' km/l' : '-' }}
+          </span>
+        </td>
+        
+        <td class="align-right highlight-col">
+          <span class="metric-badge" [ngClass]="getCustoClass(item.custoPorKm)">
+            {{ item.custoPorKm ? (item.custoPorKm | currency:'BRL') + '/km' : '-' }}
+          </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

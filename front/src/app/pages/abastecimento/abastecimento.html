@@ -1,0 +1,83 @@
+<div class="abastecimentos-layout">
+  <app-sidebar [class.show-mobile]="isMobileSidebarOpen()"></app-sidebar>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div class="header-left">
+        <button class="mobile-menu-btn" (click)="toggleMobileSidebar()">
+          <span class="material-icons">menu</span>
+        </button>
+        <div class="welcome-text">
+          <h1>Abastecimentos</h1>
+          <p>Acompanhe o consumo e gastos dos seus veículos.</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="add-btn" (click)="onNovoAbastecimento()">
+          <span class="material-icons">add</span>
+          <span>Novo Abastecimento</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content-container">
+      <section class="abastecimentos-view" *ngIf="!isFormVisible(); else formView">
+        <div class="filters-card">
+          <div class="filter-group">
+            <label for="veiculo-select">Selecione o Veículo</label>
+            <select 
+              id="veiculo-select" 
+              class="form-control"
+              [ngModel]="selectedVeiculoId()"
+              (ngModelChange)="onVeiculoChange($event)"
+            >
+              <option *ngFor="let v of veiculos()" [value]="v.id">
+                {{ v.marca }} {{ v.modelo }} - {{ v.placa }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-container" *ngIf="abastecimentos().length > 0; else emptyState">
+          <app-abastecimento-table [abastecimentos]="abastecimentos()"></app-abastecimento-table>
+        </div>
+        
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <span class="material-icons">local_gas_station</span>
+            <p *ngIf="veiculos().length > 0; else noVehicles">
+              Nenhum abastecimento registrado para este veículo.
+            </p>
+            <ng-template #noVehicles>
+              <p>Você precisa cadastrar um veículo antes de registrar abastecimentos.</p>
+            </ng-template>
+            <button 
+              class="btn-primary" 
+              (click)="onNovoAbastecimento()"
+              [disabled]="veiculos().length === 0"
+            >
+              Registrar Primeiro Abastecimento
+            </button>
+          </div>
+        </ng-template>
+      </section>
+
+      <ng-template #formView>
+        <section class="form-container">
+          <div class="section-header">
+            <h3>Novo Abastecimento</h3>
+          </div>
+          <app-abastecimento-form
+            [veiculos]="veiculos()"
+            [preselectedVeiculoId]="selectedVeiculoId()"
+            [isLoading]="isSubmitting"
+            (save)="onSave($event)"
+            (cancel)="onCancelForm()"
+          ></app-abastecimento-form>
+        </section>
+      </ng-template>
+    </div>
+  </main>
+  
+  <div class="mobile-overlay" *ngIf="isMobileSidebarOpen()" (click)="toggleMobileSidebar()"></div>
+</div>

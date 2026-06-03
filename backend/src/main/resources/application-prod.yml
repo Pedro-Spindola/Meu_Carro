@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: drivenote
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 3600000
+    refresh-expiration: 604800000
+
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      enabled: true
+      pattern: '%h %l %u %t "%r" %s %b %{X-Correlation-Id}i'
+      directory: logs
+      prefix: access
+      suffix: .log
+      rotate: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: WARN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+app:
+  refresh-cookie:
+    secure: true
+    sameSite: None
+  cors:
+    allowed-origins: "https://seu-frontend.com"
+  rate-limit:
+    enabled: true
+    capacity: 60
+    period: 1m

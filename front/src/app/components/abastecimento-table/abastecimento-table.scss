@@ -1,0 +1,108 @@
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  background: var(--surface-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+
+  th {
+    padding: 1rem;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--border-color);
+    background: rgba(0,0,0,0.02);
+
+    &.align-right {
+      text-align: right;
+    }
+  }
+
+  td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    vertical-align: middle;
+
+    &.align-right {
+      text-align: right;
+    }
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background-color: rgba(0,0,0,0.01);
+  }
+
+  .col-date { 
+    color: var(--text-secondary-color); 
+    font-weight: 500;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary-color);
+    font-style: italic;
+  }
+
+  .highlight-col {
+    background: rgba(0,0,0,0.01);
+  }
+}
+
+.fuel-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--border-color);
+  color: var(--text-color);
+}
+
+.metric-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  .material-icons {
+    font-size: 16px;
+  }
+
+  &.neutral {
+    color: var(--text-secondary-color);
+  }
+
+  &.good {
+    color: #4caf50;
+    background-color: rgba(76, 175, 80, 0.1);
+  }
+
+  &.average {
+    color: #ff9800;
+    background-color: rgba(255, 152, 0, 0.1);
+  }
+
+  &.poor {
+    color: #f44336;
+    background-color: rgba(244, 67, 54, 0.1);
+  }
+}

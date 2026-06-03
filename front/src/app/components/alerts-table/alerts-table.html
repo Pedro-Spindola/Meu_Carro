@@ -1,0 +1,41 @@
+<div class="alerts-container">
+  <h3>Alertas e Notificações</h3>
+  <table class="alerts-table">
+    <thead>
+      <tr>
+        <th>Carro</th>
+        <th>Título</th>
+        <th>Data</th>
+        <th>Status</th>
+        <th class="col-actions">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let alert of alerts" (click)="viewDetails(alert)" class="clickable-row">
+        <td class="col-vehicle">{{ alert.nomeVeiculo }}</td>
+        <td class="col-title">
+          <div class="title-with-icon">
+            <span class="material-icons">notifications</span>
+            {{ alert.titulo }}
+          </div>
+        </td>
+        <td class="col-date">{{ alert.dataAlerta | date:'dd/MM/yyyy' }}</td>
+        <td class="col-status">
+          <span class="status-badge" [ngClass]="getStatusClass(alert.status)">
+            {{ alert.status }}
+          </span>
+        </td>
+        <td class="col-actions">
+          <button 
+            *ngIf="alert.status !== 'CONCLUIDO'"
+            class="action-btn conclude-btn" 
+            (click)="concluir(alert.id, $event)"
+            title="Concluir"
+          >
+            <span class="material-icons">check_circle</span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

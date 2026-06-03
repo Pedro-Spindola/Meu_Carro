@@ -1,0 +1,43 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="plano-form">
+  <div class="form-grid">
+    <div class="form-field">
+      <label for="tipo">Tipo de Manutenção</label>
+      <input id="tipo" type="text" formControlName="tipo" readonly>
+    </div>
+
+    <div class="form-field">
+      <label for="descricao">Descrição (Opcional)</label>
+      <input id="descricao" type="text" formControlName="descricao" placeholder="Ex: Revisão de 10.000km">
+    </div>
+
+    <div class="form-field">
+      <label for="intervaloKm">Intervalo (Quilometragem)</label>
+      <input id="intervaloKm" type="number" formControlName="intervaloKm" placeholder="Ex: 10000">
+      <div class="error" *ngIf="form.get('intervaloKm')?.invalid && form.get('intervaloKm')?.touched">
+        Intervalo de KM deve ser positivo.
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="intervaloDias">Intervalo (Dias)</label>
+      <input id="intervaloDias" type="number" formControlName="intervaloDias" placeholder="Ex: 365">
+      <div class="error" *ngIf="form.get('intervaloDias')?.invalid && form.get('intervaloDias')?.touched">
+        Intervalo de dias deve ser positivo.
+      </div>
+    </div>
+
+    <div class="form-field">
+      <div class="checkbox-field">
+        <input id="ativo" type="checkbox" formControlName="ativo">
+        <label for="ativo">Plano Ativo</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+    <button type="submit" class="btn-save" [disabled]="form.invalid || isLoading()">
+      {{ isLoading() ? 'Salvando...' : 'Salvar' }}
+    </button>
+  </div>
+</form>

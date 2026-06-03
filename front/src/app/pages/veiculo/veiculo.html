@@ -1,0 +1,60 @@
+<div class="veiculos-layout">
+  <app-sidebar [class.show-mobile]="isMobileSidebarOpen()"></app-sidebar>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div class="header-left">
+        <button class="mobile-menu-btn" (click)="toggleMobileSidebar()">
+          <span class="material-icons">menu</span>
+        </button>
+        <div class="welcome-text">
+          <h1>Meus Veículos</h1>
+          <p>Gerencie sua frota pessoal.</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <button class="add-btn" (click)="onNovoVeiculo()">
+          <span class="material-icons">add</span>
+          <span>Novo Veículo</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content-container">
+      <section class="veiculos-list" *ngIf="!isFormVisible(); else formView">
+        <div class="list-grid" *ngIf="veiculos().length > 0; else emptyState">
+          <app-veiculo-list-item
+            *ngFor="let v of veiculos()"
+            [veiculo]="v"
+            (editar)="onEditar($event)"
+          ></app-veiculo-list-item>
+        </div>
+        
+        <ng-template #emptyState>
+          <div class="empty-state">
+            <span class="material-icons">directions_car</span>
+            <p>Você ainda não possui veículos cadastrados.</p>
+            <button class="btn-primary" (click)="onNovoVeiculo()">Cadastrar Primeiro Veículo</button>
+          </div>
+        </ng-template>
+      </section>
+
+      <ng-template #formView>
+        <section class="form-container">
+          <div class="section-header">
+            <h3>{{ selectedVeiculo() ? 'Editar Veículo' : 'Novo Veículo' }}</h3>
+          </div>
+          <app-veiculo-form
+            [veiculo]="selectedVeiculo()"
+            [isLoading]="isSubmitting"
+            (save)="onSave($event)"
+            (cancel)="onCancelForm()"
+            (delete)="onDeleteVehicle($event)">
+          </app-veiculo-form>
+        </section>
+      </ng-template>
+    </div>
+  </main>
+  
+  <div class="mobile-overlay" *ngIf="isMobileSidebarOpen()" (click)="toggleMobileSidebar()"></div>
+</div>

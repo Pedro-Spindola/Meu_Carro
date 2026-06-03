@@ -1,0 +1,34 @@
+<div class="login-container">
+  <div class="login-form-side">
+    <div class="login-content">
+      <img [src]="themeService.logoUrl" alt="DriveNote Logo" class="logo">
+      
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" formControlName="email" placeholder="Seu email">
+        </div>
+
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha" formControlName="senha" placeholder="Sua senha">
+        </div>
+
+        <div class="login-actions">
+          <a href="#">Esqueci minha senha</a>
+          <a href="#">Novo usuário</a>
+        </div>
+
+        <p class="error-message" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+
+        <button type="submit" [disabled]="loginForm.invalid || isLoading()">
+          <span *ngIf="!isLoading()">Entrar</span>
+          <span *ngIf="isLoading()">Carregando...</span>
+        </button>
+      </form>
+    </div>
+  </div>
+  
+  <div class="login-image-side">
+  </div>
+</div>

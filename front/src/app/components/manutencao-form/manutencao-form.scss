@@ -1,0 +1,104 @@
+@use 'sass:color';
+
+.manutencao-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: var(--surface-color);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &.full-width {
+    grid-column: 1 / -1;
+  }
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  input, select, textarea {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--background-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .error {
+    color: var(--status-delayed-color);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+
+  button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  .btn-cancel {
+    background: transparent;
+    color: var(--text-secondary-color);
+    border: 1px solid var(--border-color);
+
+    &:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  .btn-save {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.9);
+    }
+  }
+}

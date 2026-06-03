@@ -1,0 +1,106 @@
+@use 'styles/colors' as *;
+@use 'styles/functions' as f;
+
+.login-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  min-height: 100vh;
+  background-color: f.c(background);
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.login-form-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: f.c(surface);
+
+  .login-content {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+.logo {
+  max-width: 200px;
+  margin: 0 auto;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  label {
+    font-size: 0.9rem;
+    color: f.c(text-secondary);
+  }
+
+  input {
+    padding: 0.8rem;
+    border-radius: 4px;
+    border: 1px solid f.c(border);
+    background-color: transparent;
+    color: f.c(text);
+    outline: none;
+
+    &:focus {
+      border-color: f.c(primary);
+    }
+  }
+}
+
+.login-actions {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+
+  a {
+    color: f.c(primary);
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
+
+.error-message {
+  color: #ff5252;
+  font-size: 0.85rem;
+  margin: 0;
+  min-height: 1.2rem;
+}
+
+button {
+  padding: 1rem;
+  background-color: f.c(primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.login-image-side {
+  background: url('/background_login.png') center/cover no-repeat;
+  @media (max-width: 768px) {
+    display: none;
+  }
+}

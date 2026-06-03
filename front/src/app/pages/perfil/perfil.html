@@ -1,0 +1,121 @@
+<div class="perfil-layout">
+  <app-sidebar [class.show-mobile]="isMobileSidebarOpen()"></app-sidebar>
+
+  <main class="main-content">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="header-left">
+        <button class="mobile-menu-btn" (click)="toggleMobileSidebar()">
+          <span class="material-icons">menu</span>
+        </button>
+        <div class="welcome-text">
+          <h1>Meu Perfil</h1>
+          <p>Gerencie suas informações e preferências.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="perfil-grid">
+      <!-- Dados Pessoais -->
+      <section class="perfil-card">
+        <div class="card-header">
+          <span class="material-icons">person</span>
+          <h3>Dados Pessoais</h3>
+        </div>
+        <form [formGroup]="perfilForm" (ngSubmit)="onSavePerfil()">
+          <div class="form-group">
+            <label>Nome</label>
+            <input type="text" formControlName="nome" placeholder="Seu nome completo">
+          </div>
+          <div class="form-group">
+            <label>E-mail</label>
+            <input type="email" formControlName="email">
+            <small>O e-mail não pode ser alterado.</small>
+          </div>
+          <div class="form-group">
+            <label>Telefone</label>
+            <input type="text" formControlName="telefone" placeholder="(00) 00000-0000">
+          </div>
+          <button type="submit" class="save-btn" [disabled]="perfilForm.invalid || isLoading()">
+            {{ isLoading() ? 'Salvando...' : 'Salvar Alterações' }}
+          </button>
+        </form>
+      </section>
+
+      <!-- Segurança -->
+      <section class="perfil-card">
+        <div class="card-header">
+          <span class="material-icons">security</span>
+          <h3>Segurança</h3>
+        </div>
+        <form [formGroup]="senhaForm" (ngSubmit)="onSaveSenha()">
+          <div class="form-group">
+            <label>Senha Atual</label>
+            <input type="password" formControlName="senhaAtual" placeholder="••••••••">
+          </div>
+          <div class="form-group">
+            <label>Nova Senha</label>
+            <input type="password" formControlName="novaSenha" placeholder="Mínimo 6 caracteres">
+          </div>
+          <div class="form-group">
+            <label>Confirmar Nova Senha</label>
+            <input type="password" formControlName="confirmarSenha" placeholder="Repita a nova senha">
+          </div>
+          <button type="submit" class="save-btn" [disabled]="senhaForm.invalid || isLoading()">
+            {{ isLoading() ? 'Alterando...' : 'Alterar Senha' }}
+          </button>
+        </form>
+      </section>
+
+      <!-- Preferências -->
+      <section class="perfil-card">
+        <div class="card-header">
+          <span class="material-icons">settings</span>
+          <h3>Preferências</h3>
+        </div>
+        <div class="preferences-content">
+          <div class="pref-item">
+            <div class="pref-info">
+              <label>Tema do Sistema</label>
+              <span>Alternar entre modo claro e escuro</span>
+            </div>
+            <button class="theme-toggle" (click)="toggleTheme()">
+              <span class="material-icons">{{ themeService.theme === 'dark' ? 'light_mode' : 'dark_mode' }}</span>
+              {{ themeService.theme === 'dark' ? 'Modo Claro' : 'Modo Escuro' }}
+            </button>
+          </div>
+
+          <div class="pref-item">
+            <div class="pref-info">
+              <label>Veículo Padrão</label>
+              <span>Veículo que será carregado ao abrir o sistema</span>
+            </div>
+            <select class="vehicle-select" (change)="onPreferredVehicleChange($event)" [ngModel]="preferredVehicleId()">
+              <option value="">Nenhum (usar primeiro da lista)</option>
+              <option *ngFor="let v of veiculos()" [value]="v.id">{{ v.marca }} {{ v.modelo }} ({{ v.placa }})</option>
+            </select>
+          </div>
+
+          <div class="pref-item simulation-item">
+            <div class="pref-info">
+              <label>Simular Lembretes</label>
+              <span>Processar manutenções vencidas agora</span>
+            </div>
+            <button class="simulate-btn" (click)="onSimulateScheduler()" [disabled]="isLoading()">
+              <span class="material-icons">refresh</span>
+              {{ isLoading() ? 'Processando...' : 'Rodar Agora' }}
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Feedback Message -->
+    <div class="toast" *ngIf="message()" [class]="message()?.type">
+      <span class="material-icons">{{ message()?.type === 'success' ? 'check_circle' : 'error' }}</span>
+      <span>{{ message()?.text }}</span>
+    </div>
+  </main>
+
+  <div class="mobile-overlay" *ngIf="isMobileSidebarOpen()" (click)="toggleMobileSidebar()"></div>
+</div>

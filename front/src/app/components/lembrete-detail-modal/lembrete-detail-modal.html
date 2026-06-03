@@ -1,0 +1,67 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h2>Detalhes do Lembrete</h2>
+      <button class="close-btn" (click)="onClose()">
+        <span class="material-icons">close</span>
+      </button>
+    </header>
+
+    <div class="modal-body">
+      <div class="lembrete-header">
+        <div class="icon-circle" [ngClass]="getStatusClass(lembrete.status)">
+          <span class="material-icons">{{ getTipoIcon(lembrete.tipo) }}</span>
+        </div>
+        <div class="title-info">
+          <h3>{{ lembrete.titulo }}</h3>
+          <span class="badge" [ngClass]="getStatusClass(lembrete.status)">
+            {{ lembrete.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Veículo</label>
+          <div class="detail-value">
+            <span class="material-icons">directions_car</span>
+            {{ lembrete.nomeVeiculo }} ({{ lembrete.placaVeiculo }})
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <label>Data de Alerta</label>
+          <div class="detail-value">
+            <span class="material-icons">event</span>
+            {{ lembrete.dataAlerta | date:'dd/MM/yyyy' }}
+          </div>
+        </div>
+
+        <div class="detail-item full-width">
+          <label>Descrição</label>
+          <div class="detail-value description">
+            {{ lembrete.descricao || 'Sem descrição informada.' }}
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <label>Criado em</label>
+          <div class="detail-value small">
+            {{ lembrete.createdAt | date:'dd/MM/yyyy HH:mm' }}
+          </div>
+        </div>
+
+        <div class="detail-item">
+          <label>Tipo</label>
+          <div class="detail-value small">
+            {{ lembrete.tipo }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="modal-footer">
+      <button class="btn-close" (click)="onClose()">Fechar</button>
+    </footer>
+  </div>
+</div>

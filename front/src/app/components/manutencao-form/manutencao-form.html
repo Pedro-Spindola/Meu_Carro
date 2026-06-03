@@ -1,0 +1,52 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="manutencao-form">
+  <div class="form-grid">
+    <div class="form-field full-width">
+      <label for="planoId">Plano de Manutenção (Opcional)</label>
+      <select id="planoId" formControlName="planoId">
+        <option [value]="null">Nenhum plano (Manutenção avulsa)</option>
+        <option *ngFor="let plano of planos" [value]="plano.id">
+          {{ plano.tipo }} - {{ plano.descricao || 'Sem descrição' }}
+        </option>
+      </select>
+    </div>
+
+    <div class="form-field full-width">
+      <label for="descricao">Descrição</label>
+      <input id="descricao" type="text" formControlName="descricao" placeholder="Ex: Troca de óleo Shell Helix">
+      <div class="error" *ngIf="form.get('descricao')?.invalid && form.get('descricao')?.touched">
+        Descrição é obrigatória.
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="data">Data</label>
+      <input id="data" type="date" formControlName="data">
+      <div class="error" *ngIf="form.get('data')?.invalid && form.get('data')?.touched">
+        Data é obrigatória.
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="quilometragem">Quilometragem</label>
+      <input id="quilometragem" type="number" formControlName="quilometragem" placeholder="Ex: 50000">
+      <div class="error" *ngIf="form.get('quilometragem')?.invalid && form.get('quilometragem')?.touched">
+        Quilometragem deve ser positiva.
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="valor">Valor (R$)</label>
+      <input id="valor" type="number" step="0.01" formControlName="valor" placeholder="Ex: 150.00">
+      <div class="error" *ngIf="form.get('valor')?.invalid && form.get('valor')?.touched">
+        Valor deve ser positivo.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn-cancel" (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+    <button type="submit" class="btn-save" [disabled]="form.invalid || isLoading()">
+      {{ isLoading() ? 'Salvando...' : 'Salvar' }}
+    </button>
+  </div>
+</form>

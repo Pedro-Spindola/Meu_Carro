@@ -1,0 +1,31 @@
+<aside class="sidebar" [class.collapsed]="isCollapsed()">
+  <div class="sidebar-header">
+    <div class="logo-container">
+      <img [src]="themeService.logoUrl" alt="MeuCarro Logo" class="logo">
+      <span class="logo-text" *ngIf="!isCollapsed()">MeuCarro</span>
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <span class="material-icons">
+        {{ isCollapsed() ? 'chevron_right' : 'chevron_left' }}
+      </span>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li class="nav-item" *ngFor="let item of menuItems">
+        <a [routerLink]="item.route" routerLinkActive="active" class="nav-link" [title]="item.label">
+          <span class="material-icons">{{ item.icon }}</span>
+          <span class="nav-label" *ngIf="!isCollapsed()">{{ item.label }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="logout-btn" (click)="logout()" title="Sair">
+      <span class="material-icons">logout</span>
+      <span class="logout-label" *ngIf="!isCollapsed()">Sair</span>
+    </button>
+  </div>
+</aside>

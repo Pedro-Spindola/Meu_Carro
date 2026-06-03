@@ -1,0 +1,32 @@
+<div class="table-container">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Descrição</th>
+        <th class="align-right">Quilometragem</th>
+        <th class="align-right">Valor</th>
+        <th class="align-right">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="manutencoes().length === 0">
+        <td colspan="5" class="empty-state">Nenhuma manutenção registrada.</td>
+      </tr>
+      <tr *ngFor="let item of manutencoes()">
+        <td class="col-date">{{ item.data | date:'dd/MM/yyyy' }}</td>
+        <td>{{ item.descricao }}</td>
+        <td class="align-right">{{ item.quilometragem | number }} km</td>
+        <td class="align-right">{{ item.valor | currency:'BRL' }}</td>
+        <td class="align-right actions">
+          <button class="btn-icon">
+            <span class="material-icons">edit</span>
+          </button>
+          <button class="btn-icon delete">
+            <span class="material-icons">delete</span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

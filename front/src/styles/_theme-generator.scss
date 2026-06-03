@@ -1,0 +1,24 @@
+@use 'sass:map';
+@import 'colors';
+@import 'theme';
+
+@mixin generate-theme-vars($theme-name) {
+  $theme-map: map.get($colors, $theme-name);
+  --theme-name: "#{$theme-name}";
+  @each $key, $value in $theme-map {
+    --#{$key}-color: #{$value};
+  }
+}
+
+:root {
+  // Set default variables based on the static SASS variable
+  @include generate-theme-vars($current-theme);
+
+  // Still support classes for the service/future switching
+  &.light-theme {
+    @include generate-theme-vars(light);
+  }
+  &.dark-theme {
+    @include generate-theme-vars(dark);
+  }
+}

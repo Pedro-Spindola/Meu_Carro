@@ -1,0 +1,16 @@
+@use 'sass:map';
+@import 'theme';
+@import 'colors';
+@import 'model';
+
+@function c($key) {
+  @return var(--#{$key}-color);
+}
+
+@function v($type, $key) {
+  @return map.get(map.get($model, $type), $key);
+}
+
+@function bp($key) {
+  @return map.get(map.get($model, 'breakpoints'), $key);
+}

@@ -1,0 +1,50 @@
+<div class="plano-card" [ngClass]="statusInfo().class">
+  <div class="card-header">
+    <div class="tipo-container">
+      <span class="material-icons tipo-icon">{{ statusInfo().icon }}</span>
+      <div class="tipo-info">
+        <h3>{{ getTipoLabel(tipo()) }}</h3>
+        <p *ngIf="plano()">{{ plano()?.descricao }}</p>
+        <p *ngIf="!plano()">Nenhum plano configurado</p>
+      </div>
+    </div>
+    <div class="status-badge">
+      {{ statusInfo().label }}
+    </div>
+  </div>
+
+  <div class="card-body">
+    <ng-container *ngIf="plano() as p">
+      <div class="metric" *ngIf="p.intervaloKm">
+        <span class="metric-label">Intervalo KM:</span>
+        <span class="metric-value">{{ p.intervaloKm | number }} km</span>
+      </div>
+      <div class="metric" *ngIf="p.intervaloDias">
+        <span class="metric-label">Intervalo Tempo:</span>
+        <span class="metric-value">{{ p.intervaloDias }} dias</span>
+      </div>
+    </ng-container>
+    
+    <div class="last-maintenance">
+      <span class="metric-label">Última:</span>
+      <span class="metric-value" *ngIf="ultimaManutencao() as u">
+        {{ u.quilometragem | number }} km em {{ u.data | date:'dd/MM/yyyy' }}
+      </span>
+      <span class="metric-value" *ngIf="!ultimaManutencao()">
+        Nunca realizada
+      </span>
+    </div>
+  </div>
+
+  <div class="card-footer">
+    <button *ngIf="plano() as p" class="btn-manage" (click)="gerenciar.emit(p)">
+      Gerenciar
+    </button>
+    <button *ngIf="!plano()" class="btn-manage" (click)="criarPlano.emit(tipo())">
+      Configurar Plano
+    </button>
+    <button class="btn-record" (click)="novoRegistro.emit(plano() || undefined)">
+      Novo Registro
+    </button>
+  </div>
+</div>

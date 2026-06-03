@@ -1,0 +1,24 @@
+<div class="veiculo-item">
+  <div class="veiculo-header">
+    <h3>{{ veiculo.marca }} {{ veiculo.modelo }}</h3>
+    <button class="btn-edit" (click)="onEditar()">Editar</button>
+  </div>
+  <div class="veiculo-details">
+    <div class="detail">
+      <span class="label">Ano:</span>
+      <span class="value">{{ veiculo.ano }}</span>
+    </div>
+    <div class="detail">
+      <span class="label">Placa:</span>
+      <span class="value">{{ veiculo.placa }}</span>
+    </div>
+    <div class="detail">
+      <span class="label">Combustível:</span>
+      <span class="value">{{ veiculo.combustivel }}</span>
+    </div>
+    <div class="detail">
+      <span class="label">KM:</span>
+      <span class="value">{{ veiculo.quilometragemAtual | number }}</span>
+    </div>
+  </div>
+</div>

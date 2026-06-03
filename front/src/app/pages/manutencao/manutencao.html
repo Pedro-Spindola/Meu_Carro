@@ -1,0 +1,96 @@
+<div class="layout-container">
+  <app-sidebar [class.show-mobile]="isMobileSidebarOpen()"></app-sidebar>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div class="header-info">
+        <button class="mobile-menu-btn" (click)="toggleMobileSidebar()">
+          <span class="material-icons">menu</span>
+        </button>
+        <h1>Manutenção</h1>
+        <p>Acompanhe e registre as manutenções do seu veículo</p>
+      </div>
+
+      <div class="header-actions">
+        <div class="vehicle-selector">
+          <label for="veiculo">Veículo:</label>
+          <select id="veiculo" [ngModel]="veiculoSelecionadoId()" (ngModelChange)="selecionarVeiculo($event)">
+            <option *ngFor="let v of veiculos()" [value]="v.id">
+              {{ v.marca }} {{ v.modelo }} ({{ v.placa }})
+            </option>
+          </select>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-body" *ngIf="veiculoSelecionado() as veiculo">
+      <section class="plans-grid">
+        <app-plano-card 
+          *ngFor="let tipo of tiposManutencao"
+          [tipo]="tipo"
+          [plano]="getPlanoForTipo(tipo) || null"
+          [ultimaManutencao]="getUltimaManutencaoForTipo(tipo) || null"
+          [quilometragemAtual]="veiculo.quilometragemAtual"
+          (gerenciar)="onGerenciarPlano($event)"
+          (criarPlano)="onCriarPlano($event)"
+          (novoRegistro)="onNovoRegistro($event)">
+        </app-plano-card>
+      </section>
+
+      <section class="history-section">
+        <div class="section-header">
+          <h2>Histórico de Manutenções</h2>
+          <button class="btn-primary" (click)="onNovoRegistro()">
+            <span class="material-icons">add</span>
+            Novo Registro Geral
+          </button>
+        </div>
+        <app-manutencao-table [manutencoes]="manutencoes()"></app-manutencao-table>
+      </section>
+    </div>
+
+    <div class="empty-state" *ngIf="veiculos().length === 0">
+      <span class="material-icons">directions_car</span>
+      <h2>Nenhum veículo cadastrado</h2>
+      <p>Cadastre um veículo para começar a acompanhar as manutenções.</p>
+    </div>
+  </main>
+
+  <!-- Modals -->
+  <div class="modal-overlay" *ngIf="isPlanoFormVisible()">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>{{ selectedPlano() ? 'Editar Plano' : 'Configurar Plano' }}</h2>
+        <button class="close-btn" (click)="onCancelPlanoForm()">
+          <span class="material-icons">close</span>
+        </button>
+      </header>
+      <app-plano-form
+        [plano]="selectedPlano()"
+        [tipo]="selectedTipo()"
+        [isLoading]="isSubmitting"
+        (save)="onSavePlano($event)"
+        (cancel)="onCancelPlanoForm()">
+      </app-plano-form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="isManutencaoFormVisible()">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2>Novo Registro de Manutenção</h2>
+        <button class="close-btn" (click)="onCancelManutencaoForm()">
+          <span class="material-icons">close</span>
+        </button>
+      </header>
+      <app-manutencao-form
+        [planos]="planos()"
+        [isLoading]="isSubmitting"
+        (save)="onSaveManutencao($event)"
+        (cancel)="onCancelManutencaoForm()">
+      </app-manutencao-form>
+    </div>
+  </div>
+
+  <div class="mobile-overlay" *ngIf="isMobileSidebarOpen()" (click)="toggleMobileSidebar()"></div>
+</div>

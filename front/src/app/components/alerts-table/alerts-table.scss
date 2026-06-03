@@ -1,0 +1,129 @@
+.alerts-container {
+  h3 {
+    margin: 0 0 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+}
+
+.alerts-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  td {
+    padding: 1.25rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  .clickable-row {
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+  }
+
+  .col-vehicle { 
+    width: 150px; 
+    font-weight: 500;
+  }
+  .col-title { width: auto; }
+  .col-date { width: 120px; color: var(--text-secondary-color); }
+  .col-status { width: 120px; }
+  .col-actions { 
+    width: 80px; 
+    text-align: center;
+  }
+
+  .title-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .material-icons {
+      font-size: 20px;
+      color: var(--primary-color);
+      opacity: 0.8;
+    }
+  }
+
+  .action-btn {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    color: var(--text-secondary-color);
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      color: var(--primary-color);
+    }
+
+    &.conclude-btn:hover {
+      color: #4caf50;
+      background-color: rgba(76, 175, 80, 0.1);
+    }
+
+    .material-icons {
+      font-size: 20px;
+    }
+  }
+}
+
+.status-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-block;
+  text-transform: uppercase;
+
+  &.status-pending {
+    background-color: rgba(156, 39, 176, 0.1);
+    color: #9c27b0;
+  }
+
+  &.status-delayed {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #f44336;
+  }
+
+  &.status-completed {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+  }
+}
+
+@media (max-width: 768px) {
+  .alerts-table {
+    .col-vehicle, .col-date {
+      display: none;
+    }
+  }
+}

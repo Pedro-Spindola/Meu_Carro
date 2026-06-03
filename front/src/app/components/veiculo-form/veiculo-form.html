@@ -1,0 +1,63 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="veiculo-form">
+  <div class="form-grid">
+    <div class="form-field">
+      <label for="marca">Marca</label>
+      <input id="marca" type="text" formControlName="marca" placeholder="Ex: Toyota">
+      <div class="error" *ngIf="form.get('marca')?.invalid && form.get('marca')?.touched">
+        Marca é obrigatória.
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="modelo">Modelo</label>
+      <input id="modelo" type="text" formControlName="modelo" placeholder="Ex: Corolla">
+      <div class="error" *ngIf="form.get('modelo')?.invalid && form.get('modelo')?.touched">
+        Modelo é obrigatório.
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="ano">Ano</label>
+      <input id="ano" type="number" formControlName="ano">
+      <div class="error" *ngIf="form.get('ano')?.invalid && form.get('ano')?.touched">
+        Ano inválido.
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="placa">Placa</label>
+      <input id="placa" type="text" formControlName="placa" placeholder="ABC1D23">
+      <div class="error" *ngIf="form.get('placa')?.invalid && form.get('placa')?.touched">
+        Placa inválida (Formato Mercosul).
+      </div>
+    </div>
+
+    <div class="form-field">
+      <label for="combustivel">Combustível</label>
+      <select id="combustivel" formControlName="combustivel">
+        <option *ngFor="let tipo of tiposCombustivel" [value]="tipo">{{ tipo }}</option>
+      </select>
+    </div>
+
+    <div class="form-field">
+      <label for="quilometragemAtual">Quilometragem</label>
+      <input id="quilometragemAtual" type="number" formControlName="quilometragemAtual">
+      <div class="error" *ngIf="form.get('quilometragemAtual')?.invalid && form.get('quilometragemAtual')?.touched">
+        KM inválido.
+      </div>
+    </div>
+  </div>
+
+  <div class="form-footer">
+    <button type="button" class="btn-delete" *ngIf="veiculo" (click)="onDelete()" [disabled]="isLoading()">
+      <span class="material-icons">delete</span>
+      Excluir Veículo
+    </button>
+    <div class="footer-right">
+      <button type="button" class="btn-cancel" (click)="onCancel()" [disabled]="isLoading()">Cancelar</button>
+      <button type="submit" class="btn-save" [disabled]="form.invalid || isLoading()">
+        {{ isLoading() ? 'Salvando...' : 'Salvar Veículo' }}
+      </button>
+    </div>
+  </div>
+</form>

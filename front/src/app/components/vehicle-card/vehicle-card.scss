@@ -1,0 +1,88 @@
+.vehicle-card-content {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.vehicle-icon-side {
+  flex-shrink: 0;
+  
+  .icon-circle-large {
+    width: 100px;
+    height: 100px;
+    background-color: var(--primary-color-light, #e3f2fd);
+    color: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .material-icons {
+      font-size: 48px;
+    }
+  }
+}
+
+.vehicle-info-side {
+  flex-grow: 1;
+
+  .info-header {
+    margin-bottom: 1.25rem;
+
+    h4 {
+      margin: 0;
+      font-size: 1.25rem;
+      color: var(--text-color);
+      font-weight: 700;
+    }
+    p {
+      margin: 0.25rem 0 0;
+      color: var(--text-secondary-color);
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.info-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 400px) {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .detail-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary-color);
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    .detail-value {
+      font-size: 0.95rem;
+      color: var(--text-color);
+      font-weight: 600;
+
+      &.status-ok {
+        color: var(--status-completed-color, #4caf50);
+      }
+      &.status-warning {
+        color: #ff9800;
+      }
+      &.status-danger {
+        color: #f44336;
+      }
+    }
+  }
+}

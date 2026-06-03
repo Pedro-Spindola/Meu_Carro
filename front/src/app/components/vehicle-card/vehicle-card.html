@@ -1,0 +1,39 @@
+<div class="vehicle-card-content">
+  <div class="vehicle-icon-side">
+    <div class="icon-circle-large">
+      <span class="material-icons">directions_car</span>
+    </div>
+  </div>
+  
+  <div class="vehicle-info-side">
+    <div class="info-header">
+      <h4>{{ name }}</h4>
+      <p>{{ model }} - {{ year }}</p>
+    </div>
+    
+    <div class="info-details-grid">
+      <div class="detail-item">
+        <span class="detail-label">Placa</span>
+        <span class="detail-value">{{ plate }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Quilometragem</span>
+        <span class="detail-value">{{ km | number }} KM</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Próxima Revisão</span>
+        <span class="detail-value">{{ nextRevision || 'N/A' }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Status</span>
+        <span class="detail-value" [ngClass]="{
+          'status-ok': status === 'OK',
+          'status-warning': status === 'ATENCAO',
+          'status-danger': status === 'VENCIDO' || status === 'PENDENTE'
+        }">
+          {{ status === 'OK' ? 'Em Dia' : status === 'ATENCAO' ? 'Atenção' : status === 'PENDENTE' ? 'Pendente' : 'Vencido' }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

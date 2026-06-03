@@ -1,0 +1,111 @@
+<div class="home-layout">
+  <app-sidebar [class.show-mobile]="isMobileSidebarOpen()"></app-sidebar>
+
+  <main class="main-content">
+    <!-- Header -->
+    <header class="page-header">
+      <div class="header-left">
+        <button class="mobile-menu-btn" (click)="toggleMobileSidebar()">
+          <span class="material-icons">menu</span>
+        </button>
+        <div class="welcome-text">
+          <h1>Olá, {{ userName() }}</h1>
+          <p>Confira o status do seu veículo hoje.</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="user-info" routerLink="/perfil" style="cursor: pointer;">
+          <span class="material-icons">account_circle</span>
+          <span>Perfil</span>
+        </div>
+      </div>
+    </header>
+
+    <ng-container *ngIf="dashboardData() as data; else loading">
+      <!-- Top Metric Cards -->
+      <section class="stats-grid">
+        <app-stat-card
+          label="Gasto no Mês"
+          [value]="'R$ ' + (data.gastosMes.total || 0)"
+          icon="payments"
+        ></app-stat-card>
+        
+        <app-stat-card
+          label="Próxima Manutenção"
+          [value]="data.proximasManutencoes && data.proximasManutencoes.length > 0 ? data.proximasManutencoes[0].tipo : 'Nenhuma'"
+          icon="event_note"
+        ></app-stat-card>
+
+        <app-stat-card
+          label="Consumo Médio"
+          [value]="(data.autonomia.consumoMedio || 0) + ' km/L'"
+          icon="ev_station"
+        ></app-stat-card>
+
+        <app-stat-card
+          label="Último Abastecimento"
+          [value]="data.ultimoAbastecimento ? 'R$ ' + data.ultimoAbastecimento.valor : 'N/A'"
+          icon="local_gas_station"
+        ></app-stat-card>
+      </section>
+
+      <!-- Middle Section: Vehicle + Quick Actions -->
+      <div class="middle-section">
+        <section class="vehicle-container">
+          <div class="section-header">
+            <h3>Seu Veículo</h3>
+          </div>
+          <app-vehicle-card
+            [name]="data.nomeVeiculo"
+            [model]="data.modelo"
+            [year]="data.ano"
+            [plate]="data.placa"
+            [km]="data.quilometragemAtual"
+            [nextRevision]="data.proximasManutencoes && data.proximasManutencoes.length > 0 ? 'Em ' + data.proximasManutencoes[0].kmRestante + ' KM' : 'N/A'"
+            [status]="calculateVehicleStatus(data)"
+          ></app-vehicle-card>
+        </section>
+
+        <section class="quick-actions">
+          <div class="section-header">
+            <h3>Ações Rápidas</h3>
+          </div>
+          <div class="actions-grid">
+            <button class="action-btn" routerLink="/abastecimentos">
+              <div class="icon-circle"><span class="material-icons">local_gas_station</span></div>
+              <span>Abastecer</span>
+            </button>
+            <button class="action-btn" routerLink="/manutencoes">
+              <div class="icon-circle"><span class="material-icons">build</span></div>
+              <span>Manutenção</span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Bottom Section: Alerts/History -->
+      <section class="bottom-section">
+        <app-alerts-table 
+          [alerts]="globalReminders()"
+          (onConcluir)="onConcluirLembrete($event)"
+          (onViewDetails)="onViewLembreteDetails($event)"
+        ></app-alerts-table>
+      </section>
+    </ng-container>
+
+    <app-lembrete-detail-modal 
+      *ngIf="selectedLembrete()" 
+      [lembrete]="selectedLembrete()!" 
+      (close)="selectedLembrete.set(null)">
+    </app-lembrete-detail-modal>
+    
+    <ng-template #loading>
+      <div class="loading-state">
+        <span class="material-icons rotating">sync</span>
+        <p>Carregando seu painel...</p>
+      </div>
+    </ng-template>
+  </main>
+  
+  <div class="mobile-overlay" *ngIf="isMobileSidebarOpen()" (click)="toggleMobileSidebar()"></div>
+</div>
