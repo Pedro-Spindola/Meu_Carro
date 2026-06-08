@@ -20,14 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final List<String> PUBLIC_PATHS = List.of(
-            "/api/auth",
-            "/api/usuarios",
-            "/swagger-ui",
-            "/v3/api-docs",
-            "/actuator/health"
-    );
-
     private final JwtService jwtService;
     private final CustomUserDetailsService userDetailsService;
     private final TokenBlacklistRepository blacklistRepository;
@@ -37,14 +29,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         String method = request.getMethod();
 
-        boolean skip = path.startsWith("/api/auth/")
+        return path.startsWith("/api/auth/")
                 || ("/api/usuarios".equals(path) && "POST".equals(method))
                 || path.startsWith("/swagger-ui")
                 || path.startsWith("/v3/api-docs")
                 || path.startsWith("/actuator/health");
-
-        System.out.println("=== shouldNotFilter [" + method + " " + path + "] => " + skip);
-        return skip;
     }
 
     @Override
@@ -52,36 +41,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        System.out.println("=== JWT FILTER EXECUTANDO: " + request.getMethod() + " " + request.getRequestURI());
-        System.out.println("=== Authorization: " + request.getHeader("Authorization"));
-
         String authHeader = request.getHeader("Authorization");
 
-        // Log 1: ver o que está chegando
-        System.out.println(">>> Authorization header: " + authHeader);
-
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            System.out.println(">>> Header ausente ou sem Bearer");
             filterChain.doFilter(request, response);
             return;
         }
 
         String token = authHeader.substring(7);
-        System.out.println(">>> Token extraído: " + token.substring(0, 20) + "...");
 
-        boolean valid = jwtService.isTokenValid(token);
-        System.out.println(">>> Token válido? " + valid);
-
-        if (!valid) {
+        if (!jwtService.isTokenValid(token)) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String jti = jwtService.extractJti(token);
-        boolean blacklisted = blacklistRepository.existsByJti(jti);
-        System.out.println(">>> Token na blacklist? " + blacklisted);
-
-        if (blacklisted) {
+        if (blacklistRepository.existsByJti(jti)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -92,9 +67,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String email = jwtService.extractSubject(token);
-        System.out.println(">>> Email extraído: " + email);
-
         UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

@@ -22,4 +22,8 @@ security:
 
 app:
   cors:
-    allowed-origins: "http://localhost:3000"
+    allowed-origins: "http://localhost:4200"
+  rate-limit:
+    enabled: false
+    capacity: 60
+    period: 1m

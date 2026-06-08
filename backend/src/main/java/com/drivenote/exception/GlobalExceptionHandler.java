@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -86,5 +87,17 @@ public class GlobalExceptionHandler {
                 fieldError.getField(),
                 fieldError.getDefaultMessage()
         );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex,
+                                                         HttpServletRequest request) {
+        log.warn("BAD_CREDENTIALS path={} msg={}", request.getRequestURI(), ex.getMessage());
+
+        // Refresh/logout usam 401; login usa 400
+        boolean isAuthEndpoint = request.getRequestURI().contains("/auth/login");
+        HttpStatus status = isAuthEndpoint ? HttpStatus.BAD_REQUEST : HttpStatus.UNAUTHORIZED;
+
+        return buildError(status, ex.getMessage(), request, null);
     }
 }

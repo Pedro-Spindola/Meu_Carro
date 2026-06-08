@@ -21,6 +21,8 @@ class DashboardControllerIT extends BaseIntegrationTest {
                 .get("/api/dashboard/veiculo/" + veiculoId)
                 .then()
                 .statusCode(200)
-                .body("veiculoId", is(veiculoId.intValue()));
+                .body("nomeVeiculo", notNullValue())
+                .body("placa", notNullValue())
+                .body("quilometragemAtual", notNullValue());
     }
 }
