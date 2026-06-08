@@ -5,6 +5,7 @@ import com.drivenote.security.CustomAuthenticationEntryPoint;
 import com.drivenote.security.JwtAuthenticationFilter;
 import com.drivenote.security.RateLimitFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ import org.springframework.web.cors.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Configuration
 @EnableWebSecurity
@@ -29,9 +31,11 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtFilter;
-    private final RateLimitFilter rateLimitFilter;
     private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     private final CustomAccessDeniedHandler accessDeniedHandler;
+
+    @Autowired(required = false)
+    private Optional<RateLimitFilter> rateLimitFilter;
 
     @Value("${app.cors.allowed-origins:http://localhost:4200}")
     private String allowedOrigins;
@@ -58,9 +62,15 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").permitAll()
                         .anyRequest().authenticated()
-                )
-                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(jwtFilter, RateLimitFilter.class);
+                );
+
+        // Adiciona RateLimitFilter apenas se estiver disponível
+        if (rateLimitFilter.isPresent()) {
+            http.addFilterBefore(rateLimitFilter.get(), UsernamePasswordAuthenticationFilter.class);
+        }
+
+        http.addFilterAfter(jwtFilter, rateLimitFilter.isPresent() ? RateLimitFilter.class : UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 

@@ -72,7 +72,6 @@ public class TestDataFactory {
         return new TestAuthData(auth, refreshCookie);
     }
 
-    // (mantém o método antigo caso ainda use em outros testes)
     public static AuthResponse loginAndGetTokens(String email, String senha) {
         AuthRequest request = new AuthRequest(email, senha);
 

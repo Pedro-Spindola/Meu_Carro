@@ -1,41 +1,75 @@
 package com.drivenote.controller;
 
-import com.drivenote.dto.UsuarioCreateRequest;
+import com.drivenote.TestDataFactory;
+import com.drivenote.dto.SenhaUpdateRequest;
+import com.drivenote.dto.UsuarioUpdateRequest;
 import com.drivenote.it.BaseIntegrationTest;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.*;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 
-@AutoConfigureMockMvc
-@ActiveProfiles("test")
 class UsuarioControllerIT extends BaseIntegrationTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Test
+    void deveCriarUsuarioComSucesso() {
+        // Delegado para UsuarioApiTest — aqui testamos operações autenticadas
+        TestDataFactory.UserData user = TestDataFactory.createUsuario();
 
-    @Autowired
-    private ObjectMapper mapper;
+        given()
+                .header("Authorization", "Bearer " +
+                        TestDataFactory.loginAndGetTokens(user.email, user.senha).token())
+                .when()
+                .get("/api/usuarios/" + user.id)
+                .then()
+                .statusCode(200)
+                .body("id", is(user.id.intValue()))
+                .body("email", equalTo(user.email));
+    }
 
     @Test
-    void deveCriarUsuarioComSucesso() throws Exception {
-        UsuarioCreateRequest request = new UsuarioCreateRequest(
-                "Ozeias",
-                "ozeias@email.com",
-                "123456",
-                "62999999999"
-        );
+    void deveAtualizarUsuario() {
+        TestDataFactory.UserData user = TestDataFactory.createUsuario();
+        String token = TestDataFactory.loginAndGetTokens(user.email, user.senha).token();
 
-        mockMvc.perform(post("/api/usuarios")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(request)))
-                .andExpect(status().isCreated());
+        UsuarioUpdateRequest update = new UsuarioUpdateRequest("Novo Nome", "62911111111");
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .body(update)
+                .when()
+                .put("/api/usuarios/" + user.id)
+                .then()
+                .statusCode(200)
+                .body("nome", equalTo("Novo Nome"))
+                .body("telefone", equalTo("62911111111"));
+    }
+
+    @Test
+    void deveAlterarSenhaComSucesso() {
+        TestDataFactory.UserData user = TestDataFactory.createUsuario();
+        String token = TestDataFactory.loginAndGetTokens(user.email, user.senha).token();
+
+        SenhaUpdateRequest senhaRequest = new SenhaUpdateRequest(user.senha, "novaSenha123");
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .body(senhaRequest)
+                .when()
+                .put("/api/usuarios/" + user.id + "/senha")
+                .then()
+                .statusCode(204);
+    }
+
+    @Test
+    void deveRetornar401SemToken() {
+        given()
+                .when()
+                .get("/api/usuarios/1")
+                .then()
+                .statusCode(401);
     }
 }

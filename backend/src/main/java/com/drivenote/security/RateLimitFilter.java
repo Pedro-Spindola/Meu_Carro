@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,18 +18,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@ConditionalOnProperty(name = "app.rate-limit.enabled", havingValue = "true", matchIfMissing = true)
 public class RateLimitFilter extends OncePerRequestFilter {
-
-    private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
-
-    @Value("${app.rate-limit.enabled:true}")
-    private boolean enabled;
 
     @Value("${app.rate-limit.capacity:60}")
     private long capacity;
 
     @Value("${app.rate-limit.period:1m}")
     private Duration period;
+
+    private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
 
     private Bucket resolveBucket(String ip) {
         return buckets.computeIfAbsent(ip, k -> Bucket.builder()
@@ -40,12 +39,6 @@ public class RateLimitFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-
-        if (!enabled) {
-            chain.doFilter(request, response);
-            return;
-        }
-
         String ip = request.getRemoteAddr();
         Bucket bucket = resolveBucket(ip);
 
@@ -54,5 +47,9 @@ public class RateLimitFilter extends OncePerRequestFilter {
         } else {
             response.setStatus(429);
         }
+    }
+
+    public void resetBuckets() {
+        buckets.clear();
     }
 }
